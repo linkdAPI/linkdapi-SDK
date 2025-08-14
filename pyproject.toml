@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=77.0.0"]  # Updated to version that supports new license format
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "linkdapi"
+version = "1.0.0"
+description = "Python SDK for LinkdAPI - The Most Reliable Unofficial LinkedIn API"
+readme = "README.md"
+authors = [{ name = "LinkdAPI", email = "support@linkdapi.com" }]
+license = "MIT"  # Simple SPDX identifier (replaces the table format)
+keywords = [
+    "linkedin",
+    "linkedin-api",
+    "linkedin-scraper",
+    "linkedin-automation",
+    "linkedin-data",
+    "linkedin-profiles",
+    "linkedin-email-extractor",
+    "linkedin-leads",
+    "sales-navigator",
+    "recruitment-tools",
+    "lead-generation",
+    "business-intelligence",
+    "data-extraction",
+    "unofficial-api",
+    "reverse-lookup",
+    "contact-info",
+    "people-search",
+    "social-media-api",
+    "b2b-data",
+    "sales-intelligence"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Office/Business",
+    "Topic :: Software Development :: Libraries",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "httpx>=0.28.1",
+]
+
+[project.urls]
+Homepage = "https://linkdapi.com"
+Documentation = "https://linkdapi.com/docs"
+Repository = "https://github.com/linkdAPI/linkdapi-SDK"
