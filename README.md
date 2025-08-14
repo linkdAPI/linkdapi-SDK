@@ -2,7 +2,12 @@
 
 # LinkdAPI Python - Unofficial LinkedIn API
 
-A lightweight Python wrapper for [LinkdAPI](https://rapidapi.com/SeasonedCode/api/linkdapi) — the most advanced **unofficial LinkedIn API** you’ll find on RapidAPI. Instead of relying on brittle scrapers or search engine hacks, **LinkdAPI** connects straight to LinkedIn’s own mobile and web endpoints. That means you get access to real-time data with unmatched **reliability**, **stability**, and **scalability** — perfect for developers, analysts, and anyone building tools that tap into LinkedIn at scale.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Twitter Follow](https://img.shields.io/twitter/follow/linkdapi?style=social)](https://x.com/l1nkdapi)
+
+🔑 **[Get Your API Key](https://linkdapi.com/?p=signup)** (100 free credits) • 📖 **[Full Documentation](https://linkdapi.com/docs)**
+
+A lightweight Python wrapper for [LinkdAPI](https://linkdapi.com) — the most advanced **unofficial LinkedIn API** you’ll ever find. Instead of relying on brittle scrapers or search engine hacks, **LinkdAPI** connects straight to LinkedIn’s own mobile and web endpoints. That means you get access to real-time data with unmatched **reliability**, **stability**, and **scalability** — perfect for developers, analysts, and anyone building tools that tap into LinkedIn at scale.
 
 ---
 
@@ -13,6 +18,14 @@ A lightweight Python wrapper for [LinkdAPI](https://rapidapi.com/SeasonedCode/ap
 - Ideal for **automation**, **data extraction**, **reverse lookup**, and **lead generation**.
 
 ![LinkdAPI Hero](https://linkdapi.com/hero.jpg)
+
+## Why LinkdAPI Beats Alternatives
+
+| Feature | LinkdAPI | SerpAPI | Scraping |
+|---------|----------|---------|----------|
+| **Direct LinkedIn Access** | ✅ Yes | ❌ No | ❌ No |
+| **No Proxy Management** | ✅ Yes | ❌ No | ❌ No |
+| **Structured JSON Data** | ✅ Yes | ❌ HTML | ✅ Yes |
 ---
 
 ## 📦 Installation
@@ -26,11 +39,11 @@ Simply copy the `linkdapi.py` file into your project directory.
 ```python
 from linkdAPI import LinkdAPI
 
-api_key = "your_rapidapi_key_here"
+api_key = "your_linkdapi_key_here"
 client = LinkdAPI(api_key)
 
 # Get profile overview
-profile = client.get_profile_overview("lexfridman")
+profile = client.get_profile_overview("ryanroslansky")
 print(profile)
 ```
 # 📚 LinkdAPI Python - Available Methods & Usage
@@ -107,7 +120,6 @@ If you're crafting a high-performance **LinkedIn data extractor**, a deep-dive *
 
 - [LinkdAPI.com](https://linkdapi.com/)
 - [API Documentation](https://linkdapi.com/docs/intro)
-- [Pricing](https://rapidapi.com/SeasonedCode/api/linkdapi/pricing)
 
 ---
 
