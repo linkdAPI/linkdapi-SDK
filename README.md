@@ -127,6 +127,8 @@ If you're crafting a high-performance **LinkedIn data extractor**, a deep-dive *
 
 - [LinkdAPI.com](https://linkdapi.com/)
 - [API Documentation](https://linkdapi.com/docs/intro)
+- [Help Center](https://linkdapi.com/help-center)
+- [Roadmap](https://linkdapi.com/roadmap)
 
 ---
 
