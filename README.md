@@ -2,6 +2,8 @@
 
 # LinkdAPI Python - Unofficial LinkedIn API
 
+[![PyPI Version](https://img.shields.io/pypi/v/linkdapi)](https://pypi.org/project/linkdapi/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/linkdapi)](https://pypi.org/project/linkdapi/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Twitter Follow](https://img.shields.io/twitter/follow/linkdapi?style=social)](https://x.com/l1nkdapi)
 
@@ -37,17 +39,20 @@ A lightweight Python wrapper for [LinkdAPI](https://linkdapi.com) — the most a
 
 ## 📦 Installation
 
-Simply copy the `linkdapi.py` file into your project directory.
+Install with pip:
+
+```bash
+pip install linkdapi
+```
 
 ---
 
 ## 💻 Usage
 
 ```python
-from linkdAPI import LinkdAPI
+from linkdapi import LinkdAPI
 
-api_key = "your_linkdapi_key_here"
-client = LinkdAPI(api_key)
+client = LinkdAPI("your_api_key")
 
 # Get profile overview
 profile = client.get_profile_overview("ryanroslansky")
