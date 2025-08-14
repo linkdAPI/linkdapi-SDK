@@ -25,7 +25,14 @@ A lightweight Python wrapper for [LinkdAPI](https://linkdapi.com) — the most a
 |---------|----------|---------|----------|
 | **Direct LinkedIn Access** | ✅ Yes | ❌ No | ❌ No |
 | **No Proxy Management** | ✅ Yes | ❌ No | ❌ No |
+| **No Cookies Management** | ✅ Yes | ❌ No | ❌ No |
 | **Structured JSON Data** | ✅ Yes | ❌ HTML | ✅ Yes |
+| **Scalability** | ✅ Built for scale | ❌ Rate-limited | ❌ Manual effort |
+| **Pricing Transparency**    | ✅ Clear pricing tiers  | ✅ Pay-per-request     | ❌ Hidden costs (proxies, CAPTCHAs) |
+| **API Reliability**         | ✅ High uptime         | ✅ Good                | ❌ Unstable (blocks)   |
+| **Automation-Friendly**     | ✅ Full automation      | ✅ Partial             | ❌ Manual work needed  |
+| **Support & Documentation**| ✅ Dedicated support   | ✅ Good docs           | ❌ Community-based     |
+| **Anti-Blocking**           | ✅ Built-in evasion     | ❌ N/A                 | ❌ High risk           |
 ---
 
 ## 📦 Installation
