@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List, Union
 import time
 
 import httpx
@@ -440,7 +440,223 @@ class LinkdAPI:
     # Service Status Endpoint
     def get_service_status(self) -> dict:
         return self._send_request("GET", "status/")
+
+    # Companies Endpoints
+    def company_name_lookup(self, query: str) -> dict:
+        """
+        Search companies by name.
+        
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/companies/name-lookup
+        
+        Args:
+            query (str): The search query (can be 1 character or multiple)
+            
+        Returns:
+            dict: List of matching companies
+        """
+        return self._send_request("GET", "api/v1/companies/name-lookup", {"query": query})
     
-    def __del__(self):
-        """Clean up the HTTP client when the instance is destroyed."""
-        self.client.close()
+    def get_company_info(self, company_id: Optional[str] = None, name: Optional[str] = None) -> dict:
+        """
+        Get company details either by ID or name.
+        
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/companies/company/info
+        
+        Args:
+            company_id (str, optional): Company ID
+            name (str, optional): Company name
+            
+        Returns:
+            dict: Company details information
+            
+        Raises:
+            ValueError: If neither company_id nor name is provided
+        """
+        if not company_id and not name:
+            raise ValueError("Either company_id or name must be provided")
+        
+        params = {}
+        if company_id:
+            params["id"] = company_id
+        if name:
+            params["name"] = name
+            
+        return self._send_request("GET", "api/v1/companies/company/info", params)
+    
+    def get_similar_companies(self, company_id: str) -> dict:
+        """
+        Get similar companies by ID.
+        
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/companies/company/similar
+        
+        Args:
+            company_id (str): Company ID
+            
+        Returns:
+            dict: List of similar companies
+        """
+        return self._send_request("GET", "api/v1/companies/company/similar", {"id": company_id})
+    
+    def get_company_employees_data(self, company_id: str) -> dict:
+        """
+        Get company employees data by ID.
+        
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/companies/company/employees-data
+        
+        Args:
+            company_id (str): Company ID
+            
+        Returns:
+            dict: Company employees data
+        """
+        return self._send_request("GET", "api/v1/companies/company/employees-data", {"id": company_id})
+
+    # Jobs Endpoints
+    def search_jobs(
+        self,
+        *,
+        keyword: Optional[str] = None,
+        location: Optional[str] = None,
+        geo_id: Optional[str] = None,
+        company_ids: Optional[Union[str, List[str]]] = None,
+        job_types: Optional[Union[str, List[str]]] = None,
+        experience: Optional[Union[str, List[str]]] = None,
+        regions: Optional[Union[str, List[str]]] = None,
+        time_posted: str = "any",
+        salary: Optional[str] = None,
+        work_arrangement: Optional[Union[str, List[str]]] = None,
+        start: int = 0
+    ) -> dict:
+        """
+        Search for jobs with various filters.
+        
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/jobs/search
+        
+        Args:
+            keyword (str, optional): Job title, skills, or keywords
+            location (str, optional): City, state, or region
+            geo_id (str, optional): LinkedIn's internal geographic identifier
+            company_ids (str or list, optional): Specific company LinkedIn IDs
+            job_types (str or list, optional): Employment types (full_time, part_time, contract, temporary, internship, volunteer)
+            experience (str or list, optional): Experience levels (internship, entry_level, associate, mid_senior, director)
+            regions (str or list, optional): Specific region codes
+            time_posted (str, optional): How recently posted (any, 24h, 1week, 1month)
+            salary (str, optional): Minimum salary (any, 40k, 60k, 80k, 100k, 120k)
+            work_arrangement (str or list, optional): Work arrangement (onsite, remote, hybrid)
+            start (int, optional): Pagination start index
+            
+        Returns:
+            dict: List of job search results
+        """
+        params = {"start": start}
+        
+        if keyword:
+            params["keyword"] = keyword
+        if location:
+            params["location"] = location
+        if geo_id:
+            params["geoId"] = geo_id
+        if company_ids:
+            if isinstance(company_ids, list):
+                params["companyIds"] = ",".join(company_ids)
+            else:
+                params["companyIds"] = company_ids
+        if job_types:
+            if isinstance(job_types, list):
+                params["jobTypes"] = ",".join(job_types)
+            else:
+                params["jobTypes"] = job_types
+        if experience:
+            if isinstance(experience, list):
+                params["experience"] = ",".join(experience)
+            else:
+                params["experience"] = experience
+        if regions:
+            if isinstance(regions, list):
+                params["regions"] = ",".join(regions)
+            else:
+                params["regions"] = regions
+        if time_posted:
+            params["timePosted"] = time_posted
+        if salary:
+            params["salary"] = salary
+        if work_arrangement:
+            if isinstance(work_arrangement, list):
+                params["workArrangement"] = ",".join(work_arrangement)
+            else:
+                params["workArrangement"] = work_arrangement
+                
+        return self._send_request("GET", "api/v1/jobs/search", params)
+    
+    def get_job_details(self, job_id: str) -> dict:
+        """
+        Get job details by job ID.
+        
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/jobs/job/details
+        
+        Args:
+            job_id (str): Job ID (must be open and actively hiring)
+            
+        Returns:
+            dict: Detailed job information
+        """
+        return self._send_request("GET", "api/v1/jobs/job/details", {"jobId": job_id})
+    
+    def get_similar_jobs(self, job_id: str) -> dict:
+        """
+        Get similar jobs by job ID.
+        
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/jobs/job/similar
+        
+        Args:
+            job_id (str): Job ID
+            
+        Returns:
+            dict: List of similar jobs
+        """
+        return self._send_request("GET", "api/v1/jobs/job/similar", {"jobId": job_id})
+    
+    def get_people_also_viewed_jobs(self, job_id: str) -> dict:
+        """
+        Get related jobs that people also viewed.
+        
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/jobs/job/people-also-viewed
+        
+        Args:
+            job_id (str): Job ID
+            
+        Returns:
+            dict: List of related jobs
+        """
+        return self._send_request("GET", "api/v1/jobs/job/people-also-viewed", {"jobId": job_id})
+
+    # Geos Lookup Endpoints
+    def geo_name_lookup(self, query: str) -> dict:
+        """
+        Search locations and get geo IDs.
+        
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/geos/name-lookup
+        
+        Args:
+            query (str): The search query (can be 1 character or multiple)
+            
+        Returns:
+            dict: List of matching locations with geo IDs
+        """
+        return self._send_request("GET", "api/v1/geos/name-lookup", {"query": query})
+
+    # Skills & Titles Lookup Endpoints
+    def title_skills_lookup(self, query: str) -> dict:
+        """
+        Search for keywords and get relevant skills and titles with their IDs.
+        
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/g/title-skills-lookup
+        
+        Args:
+            query (str): Search query
+            
+        Returns:
+            dict: List of relevant skills and titles with IDs
+        """
+        return self._send_request("GET", "api/v1/g/title-skills-lookup", {"query": query})
+    

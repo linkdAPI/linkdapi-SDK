@@ -81,6 +81,34 @@ get_profile_about(urn)
 get_profile_reactions(urn, cursor='')
 ```
 
+## 🔹 Companies Data
+```python
+company_name_lookup(query)
+get_company_info(company_id=None, name=None)
+get_similar_companies(company_id)
+get_company_employees_data(company_id)
+```
+
+## 🔹 Jobs Data
+```python
+search_jobs(
+  keyword=None,
+  location=None,
+  geo_id=None,
+  company_ids=None,
+  job_types=None,
+  experience=None,
+  regions=None,
+  time_posted='any',
+  salary=None,
+  work_arrangement=None,
+  start=0
+)
+get_job_details(job_id)
+get_similar_jobs(job_id)
+get_people_also_viewed_jobs(job_id)
+```
+
 ## 🔹 Posts Data
 ```python
 get_featured_posts(urn)
@@ -89,11 +117,23 @@ get_post_info(urn)
 get_post_comments(urn, start=0, count=10, cursor='')
 get_post_likes(urn, start=0)
 ```
+
 ## 🔹 Comments Data
 ```python
 get_all_comments(urn, cursor='')
 get_comment_likes(urns, start=0)
 ```
+
+## 🔹 Geos Lookup
+```python
+geo_name_lookup(query)
+```
+
+## 🔹 Skills & Titles Lookup
+```python
+title_skills_lookup(query)
+```
+
 ## 🔹 System
 ```python
 get_service_status()
