@@ -314,13 +314,13 @@ class LinkdAPI:
     def get_profile_reactions(self, urn: str, cursor: str = "") -> dict:
         """
         Get all reactions for given profile by URN.
-        
+
         Documentation: https://linkdapi.com/docs?endpoint=/api/v1/profile/reactions
         
         Args:
             urn (str): The LinkedIn URN for the profile
             cursor (str, optional): Pagination cursor
-            
+
         Returns:
             dict: Reactions data with pagination information
         """
@@ -328,6 +328,20 @@ class LinkdAPI:
         if cursor:
             params["cursor"] = cursor
         return self._send_request("GET", "api/v1/profile/reactions", params)
+
+    def get_profile_interests(self, urn: str) -> dict:
+        """
+        Get profile interests by URN.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/profile/interests
+
+        Args:
+            urn (str): The LinkedIn URN for the profile
+
+        Returns:
+            dict: Profile interests information
+        """
+        return self._send_request("GET", "api/v1/profile/interests", {"urn": urn})
     
     # Posts Endpoints
     def get_featured_posts(self, urn: str) -> dict:
@@ -500,16 +514,47 @@ class LinkdAPI:
     def get_company_employees_data(self, company_id: str) -> dict:
         """
         Get company employees data by ID.
-        
+
         Documentation: https://linkdapi.com/docs?endpoint=/api/v1/companies/company/employees-data
-        
+
         Args:
             company_id (str): Company ID
-            
+
         Returns:
             dict: Company employees data
         """
         return self._send_request("GET", "api/v1/companies/company/employees-data", {"id": company_id})
+
+    def get_company_jobs(self, company_ids: Union[str, List[str]], start: int = 0) -> dict:
+        """
+        Get available job listings for given companies by ID.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/companies/jobs
+
+        Args:
+            company_ids (str or list): Company ID(s) - can be a single ID or list of IDs
+            start (int, optional): Pagination start index (default is 0)
+
+        Returns:
+            dict: List of job listings for the specified companies
+        """
+        if isinstance(company_ids, list):
+            company_ids = ",".join(company_ids)
+        return self._send_request("GET", "api/v1/companies/jobs", {"companyIDs": company_ids, "start": start})
+
+    def get_company_affiliated_pages(self, company_id: str) -> dict:
+        """
+        Get affiliated pages/subsidiaries of a company by ID.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/companies/company/affiliated-pages
+
+        Args:
+            company_id (str): Company ID
+
+        Returns:
+            dict: List of affiliated pages and subsidiaries
+        """
+        return self._send_request("GET", "api/v1/companies/company/affiliated-pages", {"id": company_id})
 
     # Jobs Endpoints
     def search_jobs(
@@ -634,29 +679,349 @@ class LinkdAPI:
     def geo_name_lookup(self, query: str) -> dict:
         """
         Search locations and get geo IDs.
-        
+
         Documentation: https://linkdapi.com/docs?endpoint=/api/v1/geos/name-lookup
-        
+
         Args:
             query (str): The search query (can be 1 character or multiple)
-            
+
         Returns:
             dict: List of matching locations with geo IDs
         """
         return self._send_request("GET", "api/v1/geos/name-lookup", {"query": query})
 
+    # Search Endpoints
+    def search_people(
+        self,
+        *,
+        keyword: Optional[str] = None,
+        start: int = 0,
+        current_company: Optional[Union[str, List[str]]] = None,
+        first_name: Optional[str] = None,
+        geo_urn: Optional[Union[str, List[str]]] = None,
+        industry: Optional[Union[str, List[str]]] = None,
+        last_name: Optional[str] = None,
+        profile_language: Optional[str] = None,
+        past_company: Optional[Union[str, List[str]]] = None,
+        school: Optional[Union[str, List[str]]] = None,
+        service_category: Optional[str] = None,
+        title: Optional[str] = None
+    ) -> dict:
+        """
+        Search for people with various filters.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/search/people
+
+        Args:
+            keyword (str, optional): Search keyword (e.g., "software engineer")
+            start (int, optional): Pagination start index (default is 0)
+            current_company (str or list, optional): Current company IDs (comma-separated or list)
+            first_name (str, optional): First name filter
+            geo_urn (str or list, optional): Geographic URNs (comma-separated or list)
+            industry (str or list, optional): Industry IDs (comma-separated or list)
+            last_name (str, optional): Last name filter
+            profile_language (str, optional): Profile language (e.g., "en" for English)
+            past_company (str or list, optional): Past company IDs (comma-separated or list)
+            school (str or list, optional): School IDs (comma-separated or list)
+            service_category (str, optional): Service category ID
+            title (str, optional): Job title (e.g., "founder")
+
+        Returns:
+            dict: List of people matching the search criteria
+        """
+        params = {"start": start}
+
+        if keyword:
+            params["keyword"] = keyword
+        if current_company:
+            if isinstance(current_company, list):
+                params["currentCompany"] = ",".join(current_company)
+            else:
+                params["currentCompany"] = current_company
+        if first_name:
+            params["firstName"] = first_name
+        if geo_urn:
+            if isinstance(geo_urn, list):
+                params["geoUrn"] = ",".join(geo_urn)
+            else:
+                params["geoUrn"] = geo_urn
+        if industry:
+            if isinstance(industry, list):
+                params["industry"] = ",".join(industry)
+            else:
+                params["industry"] = industry
+        if last_name:
+            params["lastName"] = last_name
+        if profile_language:
+            params["profileLanguage"] = profile_language
+        if past_company:
+            if isinstance(past_company, list):
+                params["pastCompany"] = ",".join(past_company)
+            else:
+                params["pastCompany"] = past_company
+        if school:
+            if isinstance(school, list):
+                params["school"] = ",".join(school)
+            else:
+                params["school"] = school
+        if service_category:
+            params["serviceCategory"] = service_category
+        if title:
+            params["title"] = title
+
+        return self._send_request("GET", "api/v1/search/people", params)
+
+    def search_companies(
+        self,
+        *,
+        keyword: Optional[str] = None,
+        start: int = 0,
+        geo_urn: Optional[Union[str, List[str]]] = None,
+        company_size: Optional[Union[str, List[str]]] = None,
+        has_jobs: Optional[bool] = None,
+        industry: Optional[Union[str, List[str]]] = None
+    ) -> dict:
+        """
+        Search for companies with various filters.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/search/companies
+
+        Args:
+            keyword (str, optional): Search keyword (e.g., "software")
+            start (int, optional): Pagination start index (default is 0)
+            geo_urn (str or list, optional): Geographic URNs (comma-separated or list)
+            company_size (str or list, optional): Company sizes (e.g., "1-10", "11-50", "51-200")
+            has_jobs (bool, optional): Filter companies with job listings
+            industry (str or list, optional): Industry IDs (comma-separated or list)
+
+        Returns:
+            dict: List of companies matching the search criteria
+        """
+        params = {"start": start}
+
+        if keyword:
+            params["keyword"] = keyword
+        if geo_urn:
+            if isinstance(geo_urn, list):
+                params["geoUrn"] = ",".join(geo_urn)
+            else:
+                params["geoUrn"] = geo_urn
+        if company_size:
+            if isinstance(company_size, list):
+                params["companySize"] = ",".join(company_size)
+            else:
+                params["companySize"] = company_size
+        if has_jobs is not None:
+            params["hasJobs"] = str(has_jobs).lower()
+        if industry:
+            if isinstance(industry, list):
+                params["industry"] = ",".join(industry)
+            else:
+                params["industry"] = industry
+
+        return self._send_request("GET", "api/v1/search/companies", params)
+
+    def search_services(
+        self,
+        *,
+        keyword: Optional[str] = None,
+        start: int = 0,
+        geo_urn: Optional[Union[str, List[str]]] = None,
+        profile_language: Optional[str] = None,
+        service_category: Optional[Union[str, List[str]]] = None
+    ) -> dict:
+        """
+        Search for services offered by LinkedIn members.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/search/services
+
+        Args:
+            keyword (str, optional): Search keyword (e.g., "software")
+            start (int, optional): Pagination start index (default is 0)
+            geo_urn (str or list, optional): Geographic URNs (comma-separated or list)
+            profile_language (str, optional): Profile language (e.g., "en,ch")
+            service_category (str or list, optional): Service category IDs (comma-separated or list)
+
+        Returns:
+            dict: List of services matching the search criteria
+        """
+        params = {"start": start}
+
+        if keyword:
+            params["keyword"] = keyword
+        if geo_urn:
+            if isinstance(geo_urn, list):
+                params["geoUrn"] = ",".join(geo_urn)
+            else:
+                params["geoUrn"] = geo_urn
+        if profile_language:
+            params["profileLanguage"] = profile_language
+        if service_category:
+            if isinstance(service_category, list):
+                params["serviceCategory"] = ",".join(service_category)
+            else:
+                params["serviceCategory"] = service_category
+
+        return self._send_request("GET", "api/v1/search/services", params)
+
+    def search_schools(self, keyword: Optional[str] = None, start: int = 0) -> dict:
+        """
+        Search for educational institutions/schools.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/search/schools
+
+        Args:
+            keyword (str, optional): Search keyword (e.g., "software")
+            start (int, optional): Pagination start index (default is 0)
+
+        Returns:
+            dict: List of schools matching the search criteria
+        """
+        params = {"start": start}
+        if keyword:
+            params["keyword"] = keyword
+        return self._send_request("GET", "api/v1/search/schools", params)
+
+    def search_posts(
+        self,
+        *,
+        keyword: Optional[str] = None,
+        start: int = 10,
+        author_company: Optional[str] = None,
+        author_industry: Optional[str] = None,
+        author_job_title: Optional[str] = None,
+        content_type: Optional[str] = None,
+        date_posted: Optional[str] = None,
+        from_member: Optional[str] = None,
+        from_organization: Optional[Union[str, List[str]]] = None,
+        mentions_member: Optional[str] = None,
+        mentions_organization: Optional[Union[str, List[str]]] = None,
+        sort_by: str = "relevance"
+    ) -> dict:
+        """
+        Search for LinkedIn posts with various filters.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/search/posts
+
+        Args:
+            keyword (str, optional): Search keyword (e.g., "google")
+            start (int, optional): Pagination start index (default is 10)
+            author_company (str, optional): Company ID of the post author
+            author_industry (str, optional): Industry ID of the post author
+            author_job_title (str, optional): Job title of the post author (e.g., "founder")
+            content_type (str, optional): Content type (videos, photos, jobs, liveVideos, documents, collaborativeArticles)
+            date_posted (str, optional): Date filter (past-24h, past-week, past-month, past-year)
+            from_member (str, optional): Profile URN of the post author
+            from_organization (str or list, optional): Company IDs (comma-separated or list)
+            mentions_member (str, optional): Profile URN mentioned in posts
+            mentions_organization (str or list, optional): Company IDs mentioned (comma-separated or list)
+            sort_by (str, optional): Sort order (relevance, date_posted) - default is "relevance"
+
+        Returns:
+            dict: List of posts matching the search criteria
+        """
+        params = {"start": start, "sortBy": sort_by}
+
+        if keyword:
+            params["keyword"] = keyword
+        if author_company:
+            params["authorCompany"] = author_company
+        if author_industry:
+            params["authorIndustry"] = author_industry
+        if author_job_title:
+            params["authorJobTitle"] = author_job_title
+        if content_type:
+            params["contentType"] = content_type
+        if date_posted:
+            params["datePosted"] = date_posted
+        if from_member:
+            params["fromMember"] = from_member
+        if from_organization:
+            if isinstance(from_organization, list):
+                params["fromOrganization"] = ",".join(from_organization)
+            else:
+                params["fromOrganization"] = from_organization
+        if mentions_member:
+            params["mentionsMember"] = mentions_member
+        if mentions_organization:
+            if isinstance(mentions_organization, list):
+                params["mentionsOrganization"] = ",".join(mentions_organization)
+            else:
+                params["mentionsOrganization"] = mentions_organization
+
+        return self._send_request("GET", "api/v1/search/posts", params)
+
     # Skills & Titles Lookup Endpoints
     def title_skills_lookup(self, query: str) -> dict:
         """
         Search for keywords and get relevant skills and titles with their IDs.
-        
+
         Documentation: https://linkdapi.com/docs?endpoint=/api/v1/g/title-skills-lookup
-        
+
         Args:
             query (str): Search query
-            
+
         Returns:
             dict: List of relevant skills and titles with IDs
         """
         return self._send_request("GET", "api/v1/g/title-skills-lookup", {"query": query})
+
+    def services_lookup(self, query: str) -> dict:
+        """
+        Look up service categories and return matching services.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/g/services-lookup
+
+        Args:
+            query (str): Search query for services (e.g., "software")
+
+        Returns:
+            dict: List of matching service categories with IDs
+        """
+        return self._send_request("GET", "api/v1/g/services-lookup", {"query": query})
+
+    # Articles Endpoints
+    def get_all_articles(self, urn: str, start: int = 0) -> dict:
+        """
+        Get all articles published by a specific LinkedIn profile.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/articles/all
+
+        Args:
+            urn (str): The LinkedIn profile URN
+            start (int, optional): Pagination start index (default is 0)
+
+        Returns:
+            dict: List of articles published by the profile
+        """
+        return self._send_request("GET", "api/v1/articles/all", {"urn": urn, "start": start})
+
+    def get_article_info(self, url: str) -> dict:
+        """
+        Get detailed information about a specific LinkedIn article.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/articles/article/info
+
+        Args:
+            url (str): Full LinkedIn article URL (e.g., "https://www.linkedin.com/pulse/...")
+
+        Returns:
+            dict: Detailed article information
+        """
+        return self._send_request("GET", "api/v1/articles/article/info", {"url": url})
+
+    def get_article_reactions(self, urn: str, start: int = 0) -> dict:
+        """
+        Get reactions (likes, comments, etc.) for a specific LinkedIn article.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/articles/article/reactions
+
+        Args:
+            urn (str): Article/thread URN (obtained from get_article_info)
+            start (int, optional): Pagination start index (default is 0)
+
+        Returns:
+            dict: Reactions data for the article
+        """
+        return self._send_request("GET", "api/v1/articles/article/reactions", {"urn": urn, "start": start})
     
