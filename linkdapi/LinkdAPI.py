@@ -1,5 +1,4 @@
 from typing import Optional, Dict, Any, List, Union
-import asyncio
 import time
 
 import httpx
@@ -343,7 +342,48 @@ class LinkdAPI:
             dict: Profile interests information
         """
         return self._send_request("GET", "api/v1/profile/interests", {"urn": urn})
-    
+
+    def get_full_profile(self, username: Optional[str] = None, urn: Optional[str] = None) -> dict:
+        """
+        Get full profile data in 1 request (everything included).
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/profile/full
+
+        Args:
+            username (str, optional): The LinkedIn username
+            urn (str, optional): The LinkedIn URN for the profile
+
+        Returns:
+            dict: Complete profile data including all information
+
+        Raises:
+            ValueError: If neither username nor urn is provided
+        """
+        if not username and not urn:
+            raise ValueError("Either username or urn must be provided")
+
+        params = {}
+        if username:
+            params["username"] = username
+        if urn:
+            params["urn"] = urn
+
+        return self._send_request("GET", "api/v1/profile/full", params)
+
+    def get_profile_services(self, urn: str) -> dict:
+        """
+        Get profile services by URN.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/profile/services
+
+        Args:
+            urn (str): The LinkedIn URN for the profile
+
+        Returns:
+            dict: Profile services information
+        """
+        return self._send_request("GET", "api/v1/profile/services", {"urn": urn})
+
     # Posts Endpoints
     def get_featured_posts(self, urn: str) -> dict:
         """
@@ -980,6 +1020,35 @@ class LinkdAPI:
             dict: List of matching service categories with IDs
         """
         return self._send_request("GET", "api/v1/g/services-lookup", {"query": query})
+
+    # Services Endpoints
+    def get_service_details(self, vanityname: str) -> dict:
+        """
+        Get service by VanityName.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/services/service/details
+
+        Args:
+            vanityname (str): The service vanity name identifier
+
+        Returns:
+            dict: Service details information
+        """
+        return self._send_request("GET", "api/v1/services/service/details", {"vanityname": vanityname})
+
+    def get_similar_services(self, vanityname: str) -> dict:
+        """
+        Get similar services by VanityName.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/services/service/similar
+
+        Args:
+            vanityname (str): The service vanity name identifier
+
+        Returns:
+            dict: List of similar services
+        """
+        return self._send_request("GET", "api/v1/services/service/similar", {"vanityname": vanityname})
 
     # Articles Endpoints
     def get_all_articles(self, urn: str, start: int = 0) -> dict:

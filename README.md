@@ -233,6 +233,7 @@ get_profile_overview(username)          # Basic profile info
 get_profile_details(urn)                # Detailed profile data
 get_contact_info(username)              # Email, phone, websites
 get_profile_about(urn)                  # About section & verification
+get_full_profile(username=None, urn=None)  # Complete profile data in 1 request
 
 # Work & Education
 get_full_experience(urn)                # Complete work history
@@ -246,6 +247,7 @@ get_recommendations(urn)                # Given & received recommendations
 get_similar_profiles(urn)               # Similar profile suggestions
 get_profile_reactions(urn, cursor='')   # All profile reactions
 get_profile_interests(urn)              # Profile interests
+get_profile_services(urn)               # Profile services
 ```
 
 </details>
@@ -371,6 +373,16 @@ search_schools(keyword=None, start=0)
 get_all_articles(urn, start=0)         # All articles by profile
 get_article_info(url)                  # Article details from URL
 get_article_reactions(urn, start=0)    # Article likes/reactions
+```
+
+</details>
+
+<details>
+<summary><b>🔹 Services Endpoints</b> (Click to expand)</summary>
+
+```python
+get_service_details(vanityname)    # Get service by VanityName
+get_similar_services(vanityname)   # Get similar services
 ```
 
 </details>
