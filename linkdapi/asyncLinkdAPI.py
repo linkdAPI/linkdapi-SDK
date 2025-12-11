@@ -394,6 +394,20 @@ class AsyncLinkdAPI:
             dict: Profile services information
         """
         return await self._send_request("GET", "api/v1/profile/services", {"urn": urn})
+    
+    async def get_profile_urn(self, username: str) -> dict:
+        """
+        Get profile URN.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/profile/username-to-urn
+
+        Args:
+            username (str): The LinkedIn username for the profile
+
+        Returns:
+            dict: Profile urn
+        """
+        return await self._send_request("GET", "api/v1/profile/username-to-urn", {"username": username})
 
     # Posts Endpoints
     async def get_featured_posts(self, urn: str) -> dict:
@@ -607,6 +621,36 @@ class AsyncLinkdAPI:
             dict: List of affiliated pages and subsidiaries
         """
         return await self._send_request("GET", "api/v1/companies/company/affiliated-pages", {"id": company_id})
+    
+    async def get_company_posts(self, company_id: str, start: int = 0) -> dict:
+        """
+        Get Posts of a company by ID.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/companies/company/posts
+
+        Args:
+            company_id (str): Company ID
+            start (int, optional): Pagination start index
+
+        Returns:
+            dict: List of posts
+        """
+        return await self._send_request("GET", "api/v1/companies/company/posts", {"id": company_id, "start": start})
+    
+    async def get_company_id(self, universal_name: str) -> dict:
+        """
+        Get ID of a company by universal_name (username).
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/companies/company/universal-name-to-id
+
+        Args:
+            universal_name (str): Company universalName (username)
+
+        Returns:
+            dict: Company ID
+        """
+        return await self._send_request("GET", "api/v1/companies/company/posts", {"universalName": universal_name})
+
 
     # Jobs Endpoints
     async def search_jobs(
