@@ -651,6 +651,21 @@ class AsyncLinkdAPI:
         """
         return await self._send_request("GET", "api/v1/companies/company/posts", {"universalName": universal_name})
 
+    async def get_company_details_v2(self, company_id: str) -> dict:
+        """
+        Get company details V2 with extended information by company ID.
+        This endpoint returns more information about the company including
+        peopleAlsoFollow, affiliatedByJobs, etc.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/companies/company/info-v2
+
+        Args:
+            company_id (str): Company ID
+
+        Returns:
+            dict: Extended company details information
+        """
+        return await self._send_request("GET", "api/v1/companies/company/info-v2", {"id": company_id})
 
     # Jobs Endpoints
     async def search_jobs(
@@ -770,6 +785,145 @@ class AsyncLinkdAPI:
             dict: List of related jobs
         """
         return await self._send_request("GET", "api/v1/jobs/job/people-also-viewed", {"jobId": job_id})
+
+    async def get_job_details_v2(self, job_id: str) -> dict:
+        """
+        Get job details V2 by job ID. This endpoint supports all job statuses
+        (open, closed, expired, etc.) and provides detailed information about the job.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/jobs/job/details-v2
+
+        Args:
+            job_id (str): Job ID (supports all job statuses)
+
+        Returns:
+            dict: Detailed job information
+        """
+        return await self._send_request("GET", "api/v1/jobs/job/details-v2", {"jobId": job_id})
+
+    async def search_jobs_v2(
+        self,
+        *,
+        keyword: Optional[str] = None,
+        start: int = 0,
+        sort_by: Optional[str] = None,
+        date_posted: Optional[str] = None,
+        experience: Optional[Union[str, List[str]]] = None,
+        job_types: Optional[Union[str, List[str]]] = None,
+        workplace_types: Optional[Union[str, List[str]]] = None,
+        salary: Optional[str] = None,
+        companies: Optional[Union[str, List[str]]] = None,
+        industries: Optional[Union[str, List[str]]] = None,
+        locations: Optional[Union[str, List[str]]] = None,
+        functions: Optional[Union[str, List[str]]] = None,
+        titles: Optional[Union[str, List[str]]] = None,
+        benefits: Optional[Union[str, List[str]]] = None,
+        commitments: Optional[Union[str, List[str]]] = None,
+        easy_apply: Optional[bool] = None,
+        verified_job: Optional[bool] = None,
+        under_10_applicants: Optional[bool] = None,
+        fair_chance: Optional[bool] = None
+    ) -> dict:
+        """
+        Search for jobs V2 with comprehensive filters (all filters available).
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/search/jobs
+
+        Args:
+            keyword (str, optional): Search keyword
+            start (int, optional): Pagination offset (default: 0, increment by 25)
+            sort_by (str, optional): Sort by "relevance" (default) or "date_posted"
+            date_posted (str, optional): Filter by "24h", "1week", or "1month"
+            experience (str or list, optional): Experience levels (internship, entry_level, associate, mid_senior, director, executive)
+            job_types (str or list, optional): Employment types (full_time, part_time, contract, temporary, internship, volunteer, other)
+            workplace_types (str or list, optional): Work arrangement (onsite, remote, hybrid)
+            salary (str, optional): Minimum annual salary (20k, 30k, 40k, 50k, 60k, 70k, 80k, 90k, 100k)
+            companies (str or list, optional): Company IDs (comma-separated or list)
+            industries (str or list, optional): Industry IDs (comma-separated or list)
+            locations (str or list, optional): LinkedIn's internal geographic identifiers (comma-separated or list)
+            functions (str or list, optional): Job function codes (comma-separated or list, e.g., "it,sales,eng")
+            titles (str or list, optional): Job title IDs (comma-separated or list)
+            benefits (str or list, optional): Benefits offered (medical_ins, dental_ins, vision_ins, 401k, pension,
+                                            paid_maternity, paid_paternity, commuter, student_loan, tuition, disability_ins)
+            commitments (str or list, optional): Company values (dei, environmental, work_life, social_impact, career_growth)
+            easy_apply (bool, optional): Show only LinkedIn Easy Apply jobs
+            verified_job (bool, optional): Show only verified job postings
+            under_10_applicants (bool, optional): Show jobs with fewer than 10 applicants
+            fair_chance (bool, optional): Show jobs from fair chance employers
+
+        Returns:
+            dict: List of job search results
+        """
+        params = {"start": start}
+
+        if keyword:
+            params["keyword"] = keyword
+        if sort_by:
+            params["sortBy"] = sort_by
+        if date_posted:
+            params["datePosted"] = date_posted
+        if experience:
+            if isinstance(experience, list):
+                params["experience"] = ",".join(experience)
+            else:
+                params["experience"] = experience
+        if job_types:
+            if isinstance(job_types, list):
+                params["jobTypes"] = ",".join(job_types)
+            else:
+                params["jobTypes"] = job_types
+        if workplace_types:
+            if isinstance(workplace_types, list):
+                params["workplaceTypes"] = ",".join(workplace_types)
+            else:
+                params["workplaceTypes"] = workplace_types
+        if salary:
+            params["salary"] = salary
+        if companies:
+            if isinstance(companies, list):
+                params["companies"] = ",".join(companies)
+            else:
+                params["companies"] = companies
+        if industries:
+            if isinstance(industries, list):
+                params["industries"] = ",".join(industries)
+            else:
+                params["industries"] = industries
+        if locations:
+            if isinstance(locations, list):
+                params["locations"] = ",".join(locations)
+            else:
+                params["locations"] = locations
+        if functions:
+            if isinstance(functions, list):
+                params["functions"] = ",".join(functions)
+            else:
+                params["functions"] = functions
+        if titles:
+            if isinstance(titles, list):
+                params["titles"] = ",".join(titles)
+            else:
+                params["titles"] = titles
+        if benefits:
+            if isinstance(benefits, list):
+                params["Benefits"] = ",".join(benefits)
+            else:
+                params["Benefits"] = benefits
+        if commitments:
+            if isinstance(commitments, list):
+                params["commitments"] = ",".join(commitments)
+            else:
+                params["commitments"] = commitments
+        if easy_apply is not None:
+            params["easyApply"] = str(easy_apply).lower()
+        if verified_job is not None:
+            params["verifiedJob"] = str(verified_job).lower()
+        if under_10_applicants is not None:
+            params["under10Applicants"] = str(under_10_applicants).lower()
+        if fair_chance is not None:
+            params["fairChance"] = str(fair_chance).lower()
+
+        return await self._send_request("GET", "api/v1/search/jobs", params)
 
     # Geos Lookup Endpoints
     async def geo_name_lookup(self, query: str) -> dict:
