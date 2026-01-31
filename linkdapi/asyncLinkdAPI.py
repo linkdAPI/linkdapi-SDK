@@ -801,6 +801,37 @@ class AsyncLinkdAPI:
         """
         return await self._send_request("GET", "api/v1/jobs/job/details-v2", {"jobId": job_id})
 
+    async def get_hiring_team(self, job_id: str, start: int = 0) -> dict:
+        """
+        Get hiring team members for a specific job.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/jobs/job/hiring-team
+
+        Args:
+            job_id (str): Job ID
+            start (int, optional): Pagination start index (default is 0)
+
+        Returns:
+            dict: List of hiring team members
+        """
+        return await self._send_request("GET", "api/v1/jobs/job/hiring-team", {"jobId": job_id, "start": start})
+
+    async def get_profile_posted_jobs(self, profile_urn: str, start: int = 0, count: int = 25) -> dict:
+        """
+        Get jobs posted by a specific profile.
+
+        Documentation: https://linkdapi.com/docs?endpoint=/api/v1/jobs/posted-by-profile
+
+        Args:
+            profile_urn (str): Profile URN
+            start (int, optional): Pagination start index (default is 0)
+            count (int, optional): Number of jobs to retrieve (default is 25)
+
+        Returns:
+            dict: List of jobs posted by the profile
+        """
+        return await self._send_request("GET", "api/v1/jobs/posted-by-profile", {"profileUrn": profile_urn, "start": start, "count": count})
+
     async def search_jobs_v2(
         self,
         *,
