@@ -1,6 +1,6 @@
 ![LinkdAPI Favicon](https://linkdapi.com/favicon.ico)
 
-# LinkdAPI Python - Unofficial LinkedIn API
+# LinkdAPI Python - The best API for professional Data
 
 [![PyPI Version](https://img.shields.io/pypi/v/linkdapi)](https://pypi.org/project/linkdapi/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/linkdapi)](https://pypi.org/project/linkdapi/)
@@ -16,7 +16,7 @@
 
 </div>
 
-A lightweight Python wrapper for [LinkdAPI](https://linkdapi.com) — the most advanced **unofficial LinkedIn API** you'll ever find. Instead of relying on brittle scrapers or search engine hacks, **LinkdAPI** connects straight to LinkedIn's own mobile and web endpoints. That means you get access to real-time data with unmatched **reliability**, **stability**, and **scalability** — perfect for developers, analysts, and anyone building tools that tap into LinkedIn at scale.
+A lightweight Python wrapper for [LinkdAPI](https://linkdapi.com) — the most advanced API for accessing professional profile and company data. With unmatched **reliability**, **stability**, and **scalability**, it’s perfect for developers, analysts, and anyone building tools that work with professional networking data at scale.
 
 ---
 
@@ -42,9 +42,9 @@ A lightweight Python wrapper for [LinkdAPI](https://linkdapi.com) — the most a
 
 ## Why LinkdAPI?
 
-- We **do not rely on search engines** or SERP scraping – all data is retrieved **directly from LinkedIn.**
-- Built for **scale, stability, and accuracy** using direct endpoints.
-- Ideal for **automation**, **data extraction**, **reverse lookup**, and **lead generation**.
+- We deliver data **reliably and efficiently** without relying on complex workarounds.
+- Built for **scale, stability, and accuracy**, so your applications run smoothly.
+- Perfect for **automation**, **data analysis**, **contact enrichment**, and **lead generation**.
 
 ![LinkdAPI Hero](https://linkdapi.com/hero.jpg)
 
@@ -52,16 +52,16 @@ A lightweight Python wrapper for [LinkdAPI](https://linkdapi.com) — the most a
 
 | Feature | LinkdAPI | SerpAPI | Scraping |
 |---------|----------|---------|----------|
-| **Direct LinkedIn Access** | ✅ Yes | ❌ No | ❌ No |
+| **Reliable Data Access** | ✅ Yes | ❌ No | ❌ No |
 | **No Proxy Management** | ✅ Yes | ❌ No | ❌ No |
 | **No Cookies Management** | ✅ Yes | ❌ No | ❌ No |
 | **Structured JSON Data** | ✅ Yes | ❌ HTML | ✅ Yes |
 | **Scalability** | ✅ Built for scale | ❌ Rate-limited | ❌ Manual effort |
-| **Pricing Transparency**    | ✅ Clear pricing tiers  | ✅ Pay-per-request     | ❌ Hidden costs (proxies, CAPTCHAs) |
-| **API Reliability**         | ✅ High uptime         | ✅ Good                | ❌ Unstable (blocks)   |
-| **Automation-Friendly**     | ✅ Full automation      | ✅ Partial             | ❌ Manual work needed  |
-| **Support & Documentation**| ✅ Dedicated support   | ✅ Good docs           | ❌ Community-based     |
-| **Anti-Blocking**           | ✅ Built-in evasion     | ❌ N/A                 | ❌ High risk           |
+| **Pricing Transparency** | ✅ Clear pricing tiers | ✅ Pay-per-request | ❌ Hidden costs (proxies, CAPTCHAs) |
+| **API Reliability** | ✅ High uptime | ✅ Good | ❌ Unstable (blocks) |
+| **Automation-Friendly** | ✅ Full automation | ✅ Partial | ❌ Manual work needed |
+| **Support & Documentation** | ✅ Dedicated support | ✅ Good docs | ❌ Community-based |
+| **Stability & Resilience** | ✅ Optimized for reliability | ❌ Limited | ❌ High risk |
 ---
 
 ## 📦 Installation
@@ -127,7 +127,7 @@ profile = client.get_profile_overview("ryanroslansky")
 print(f"Profile: {profile['data']['fullName']}")
 
 # Get company information
-company = client.get_company_info(name="linkedin")
+company = client.get_company_info(name="google")
 print(f"Company: {company['data']['name']}")
 ```
 
@@ -275,7 +275,7 @@ get_company_affiliated_pages(company_id)      # Subsidiaries & affiliates
 search_jobs(
     keyword=None,              # Job title, skills, or keywords
     location=None,             # City, state, or region
-    geo_id=None,              # LinkedIn geographic ID
+    geo_id=None,              # geographic ID
     company_ids=None,         # Specific company IDs
     job_types=None,           # full_time, part_time, contract, etc.
     experience=None,          # internship, entry_level, mid_senior, etc.
@@ -421,7 +421,7 @@ import asyncio
 from linkdapi import AsyncLinkdAPI
 
 async def enrich_leads(usernames: list):
-    """Enrich a list of LinkedIn usernames with profile data."""
+    """Enrich a list of usernames with profile data."""
     async with AsyncLinkdAPI("your_api_key") as api:
         # Fetch all profiles concurrently
         tasks = [api.get_profile_overview(username) for username in usernames]
@@ -476,7 +476,7 @@ async def get_company_intelligence(company_name: str):
             'affiliates': results[3]
         }
 
-intelligence = asyncio.run(get_company_intelligence("linkedin"))
+intelligence = asyncio.run(get_company_intelligence("google"))
 ```
 
 ### Example 3: Job Market Analysis
@@ -524,7 +524,7 @@ analysis = asyncio.run(analyze_job_market(
 <td width="50%">
 
 ### 🎯 Lead Generation & Sales
-- **Profile Enrichment** - Enhance lead data with LinkedIn profiles
+- **Profile Enrichment** - Enhance lead data with professional profiles
 - **Company Research** - Deep dive into target companies
 - **Contact Discovery** - Find decision makers and key contacts
 - **Market Intelligence** - Analyze competitors and opportunities
@@ -542,7 +542,7 @@ analysis = asyncio.run(analyze_job_market(
 - **CRM Integration** - Auto-update contact records
 - **Recruiting Pipelines** - Automated candidate sourcing
 - **Brand Monitoring** - Track company mentions and sentiment
-- **API Development** - Build LinkedIn-powered applications
+- **API Development** - Build applications using professional data
 
 ### 🔍 Verification & Compliance
 - **Identity Verification** - Validate professional credentials
@@ -605,7 +605,7 @@ async with AsyncLinkdAPI(
 
 ## 🏁 Why Choose LinkdAPI Python SDK?
 
-**LinkdAPI** is more than just an API wrapper—it's a complete solution for LinkedIn data extraction:
+**LinkdAPI** is more than just an API wrapper—it's a complete solution for professional and company data access:
 
 ### ⚡ **Performance First**
 - **Async/Await Support** - Up to 40x faster for batch operations
@@ -622,7 +622,7 @@ async with AsyncLinkdAPI(
 - **Context Managers** - Proper resource cleanup
 - **Rich Documentation** - Examples for every use case
 
-Whether you're building a high-performance **LinkedIn data extractor**, a comprehensive **LinkedIn profile scraper**, or automated **recruiting tools**, LinkdAPI delivers the power, reliability, and speed you need—without the complexity of traditional scraping.
+Whether you're building tools to gather professional profiles, analyze company data, or automate recruiting workflows, **LinkdAPI** gives you the speed, reliability, and flexibility you need—without the hassle of complicated setups.
 
 ---
 
@@ -655,8 +655,6 @@ Whether you're building a high-performance **LinkedIn data extractor**, a compre
 
 **MIT License** – Free to use for personal and commercial projects.
 
-⚠️ **Important:** This SDK is intended for **research and educational purposes**. Always respect LinkedIn's Terms of Service and rate limits. Use responsibly and ethically.
-
 ---
 
 ## 🌟 Support the Project
@@ -671,7 +669,7 @@ If you find LinkdAPI useful, consider:
 
 <div align="center">
 
-**Built with ❤️ for developers who need reliable LinkedIn data**
+**Built with ❤️ for developers who need reliable access to professional data**
 
 [Website](https://linkdapi.com) • [Documentation](https://linkdapi.com/docs) • [Twitter](https://x.com/l1nkdapi) • [Support](https://linkdapi.com/help-center)
 
