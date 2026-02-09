@@ -826,6 +826,7 @@ class LinkdAPI:
         *,
         keyword: Optional[str] = None,
         start: int = 0,
+        count: Optional[int] = None,
         sort_by: Optional[str] = None,
         date_posted: Optional[str] = None,
         experience: Optional[Union[str, List[str]]] = None,
@@ -852,6 +853,7 @@ class LinkdAPI:
         Args:
             keyword (str, optional): Search keyword
             start (int, optional): Pagination offset (default: 0, increment by 25)
+            count (int, optional): Number of results per page (default: 25, max: 50)
             sort_by (str, optional): Sort by "relevance" (default) or "date_posted"
             date_posted (str, optional): Filter by "24h", "1week", or "1month"
             experience (str or list, optional): Experience levels (internship, entry_level, associate, mid_senior, director, executive)
@@ -876,6 +878,8 @@ class LinkdAPI:
         """
         params = {"start": start}
 
+        if count is not None:
+            params["count"] = count
         if keyword:
             params["keyword"] = keyword
         if sort_by:
@@ -966,6 +970,7 @@ class LinkdAPI:
         *,
         keyword: Optional[str] = None,
         start: int = 0,
+        count: Optional[int] = None,
         current_company: Optional[Union[str, List[str]]] = None,
         first_name: Optional[str] = None,
         geo_urn: Optional[Union[str, List[str]]] = None,
@@ -985,6 +990,7 @@ class LinkdAPI:
         Args:
             keyword (str, optional): Search keyword (e.g., "software engineer")
             start (int, optional): Pagination start index (default is 0)
+            count (int, optional): Number of results per page (default: 20, max: 50)
             current_company (str or list, optional): Current company IDs (comma-separated or list)
             first_name (str, optional): First name filter
             geo_urn (str or list, optional): Geographic URNs (comma-separated or list)
@@ -1001,6 +1007,8 @@ class LinkdAPI:
         """
         params = {"start": start}
 
+        if count is not None:
+            params["count"] = count
         if keyword:
             params["keyword"] = keyword
         if current_company:
@@ -1046,6 +1054,7 @@ class LinkdAPI:
         *,
         keyword: Optional[str] = None,
         start: int = 0,
+        count: Optional[int] = None,
         geo_urn: Optional[Union[str, List[str]]] = None,
         company_size: Optional[Union[str, List[str]]] = None,
         has_jobs: Optional[bool] = None,
@@ -1059,6 +1068,7 @@ class LinkdAPI:
         Args:
             keyword (str, optional): Search keyword (e.g., "software")
             start (int, optional): Pagination start index (default is 0)
+            count (int, optional): Number of results per page (default: 25, max: 50)
             geo_urn (str or list, optional): Geographic URNs (comma-separated or list)
             company_size (str or list, optional): Company sizes (e.g., "1-10", "11-50", "51-200")
             has_jobs (bool, optional): Filter companies with job listings
@@ -1068,6 +1078,9 @@ class LinkdAPI:
             dict: List of companies matching the search criteria
         """
         params = {"start": start}
+
+        if count is not None:
+            params["count"] = count
 
         if keyword:
             params["keyword"] = keyword
@@ -1096,6 +1109,7 @@ class LinkdAPI:
         *,
         keyword: Optional[str] = None,
         start: int = 0,
+        count: Optional[int] = None,
         geo_urn: Optional[Union[str, List[str]]] = None,
         profile_language: Optional[str] = None,
         service_category: Optional[Union[str, List[str]]] = None
@@ -1108,6 +1122,7 @@ class LinkdAPI:
         Args:
             keyword (str, optional): Search keyword (e.g., "software")
             start (int, optional): Pagination start index (default is 0)
+            count (int, optional): Number of results per page (default: 25, max: 50)
             geo_urn (str or list, optional): Geographic URNs (comma-separated or list)
             profile_language (str, optional): Profile language (e.g., "en,ch")
             service_category (str or list, optional): Service category IDs (comma-separated or list)
@@ -1116,6 +1131,9 @@ class LinkdAPI:
             dict: List of services matching the search criteria
         """
         params = {"start": start}
+
+        if count is not None:
+            params["count"] = count
 
         if keyword:
             params["keyword"] = keyword
@@ -1134,7 +1152,7 @@ class LinkdAPI:
 
         return self._send_request("GET", "api/v1/search/services", params)
 
-    def search_schools(self, keyword: Optional[str] = None, start: int = 0) -> dict:
+    def search_schools(self, keyword: Optional[str] = None, start: int = 0, count: Optional[int] = None) -> dict:
         """
         Search for educational institutions/schools.
 
@@ -1143,11 +1161,14 @@ class LinkdAPI:
         Args:
             keyword (str, optional): Search keyword (e.g., "software")
             start (int, optional): Pagination start index (default is 0)
+            count (int, optional): Number of results per page (default: 25, max: 50)
 
         Returns:
             dict: List of schools matching the search criteria
         """
         params = {"start": start}
+        if count is not None:
+            params["count"] = count
         if keyword:
             params["keyword"] = keyword
         return self._send_request("GET", "api/v1/search/schools", params)
