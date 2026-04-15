@@ -67,6 +67,11 @@ class AsyncLinkdAPI:
     asyncio.run(main())
     ```
     """
+    _DEFAULT_HEADERS = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "User-Agent": "LinkdAPI-Python-Client/1.0",
+    }
 
     def __init__(
         self,
@@ -74,27 +79,64 @@ class AsyncLinkdAPI:
         base_url: str = "https://linkdapi.com",
         timeout: float = 30.0,
         max_retries: int = 3,
-        retry_delay: float = 1.0
+        retry_delay: float = 1.0,
+        headers: Optional[Dict[str, str]] = None
     ):
         self.api_key = api_key
         self.base_url = base_url.rstrip('/')
         self.timeout = timeout
         self.max_retries = max_retries
         self.retry_delay = retry_delay
+        self.custom_headers: Dict[str, str] = dict(headers) if headers else {}
         self.client = httpx.AsyncClient(
             timeout=timeout,
             follow_redirects=True,
             limits=httpx.Limits(max_keepalive_connections=10, max_connections=100)
         )
 
+
+    def set_header(self, name: str, value: str) -> None:
+        """Set or override a single header."""
+        self._remove_key_ci(name)
+        self.custom_headers[name] = value
+
+    def set_headers(self, headers: Dict[str, str]) -> None:
+        """Replace all custom headers with the given mapping."""
+        self.custom_headers = dict(headers)
+
+    def update_headers(self, headers: Dict[str, str]) -> None:
+        """Merge additional headers into the existing custom headers."""
+        for name, value in headers.items():
+            self.set_header(name, value)
+
+    def remove_header(self, name: str) -> bool:
+        """Remove a custom header by name (case-insensitive). Returns True if removed."""
+        return self._remove_key_ci(name)
+
+    def clear_headers(self) -> None:
+        """Remove all custom headers (defaults still apply)."""
+        self.custom_headers.clear()
+
+    def _remove_key_ci(self, name: str) -> bool:
+        lower = name.lower()
+        for key in list(self.custom_headers):
+            if key.lower() == lower:
+                del self.custom_headers[key]
+                return True
+        return False
+
     def _get_headers(self) -> Dict[str, str]:
-        """Generate headers for API requests."""
-        return {
-            "X-linkdapi-apikey": self.api_key,
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "User-Agent": "LinkdAPI-Python-Client/1.0"
-        }
+        """Build final request headers. Custom headers override defaults (case-insensitive)."""
+        custom_keys_lower = {k.lower() for k in self.custom_headers}
+
+        merged: Dict[str, str] = {}
+        if "x-linkdapi-apikey" not in custom_keys_lower:
+            merged["X-linkdapi-apikey"] = self.api_key
+        for name, value in self._DEFAULT_HEADERS.items():
+            if name.lower() not in custom_keys_lower:
+                merged[name] = value
+        merged.update(self.custom_headers)
+        return merged
 
     async def _send_request(
         self,
