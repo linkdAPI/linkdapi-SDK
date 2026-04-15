@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "linkdapi"
-version = "1.0.8"
+version = "1.0.9"
 description = "Python SDK for LinkdAPI - The best API for professional Data"
 readme = "README.md"
 authors = [{ name = "LinkdAPI", email = "support@linkdapi.com" }]
